@@ -17,6 +17,8 @@
 
 import pickle
 
+import re
+
 enron_data = pickle.load(open("../final_project/final_project_dataset.pkl", "r"))
 
 print enron_data.keys()
@@ -38,3 +40,60 @@ for person in enron_data.keys():
 
 print "\n poi count"
 print poi_count
+
+
+name_file = open("../final_project/poi_names.txt","r").read()
+
+"""
+for line in name_file:
+    if ")" in line:
+        print line.split()[1], line.split()[2]
+        """
+
+#for line in name_file
+names_poi = re.findall(" (.*)",name_file)
+
+print names_poi
+
+print len(names_poi)
+
+print "\nWhat is the total value of the stock belonging to James Prentice?\n"
+
+#print enron_data["Prentice James"].values()
+
+keys = enron_data.keys()
+
+#print keys
+
+for key in keys:
+
+    #print key
+
+    find_james = re.findall("[J]\S.+", key)
+
+    if len(find_james)> 0:
+        print find_james
+
+#print keys
+
+print "\n James Prentice's total value of stock \n"
+print enron_data['PRENTICE JAMES']['total_stock_value']
+
+print "\n How many email messages do we have from Wesley Colwell to persons of interest? \n"
+
+print enron_data["COLWELL WESLEY"]['from_this_person_to_poi']
+
+print "\n Whats the value of stock options exercised by Jeffrey K Skilling \n"
+
+for key in keys:
+
+    #print key
+
+    find_jeff_k = re.findall("[S]\S.+", key)
+
+    if len(find_jeff_k)> 0:
+        print find_jeff_k
+
+print "\n \n"
+
+print enron_data['SKILLING JEFFREY K']['exercised_stock_options']
