@@ -14,6 +14,7 @@
     enron_data["SKILLING JEFFREY K"]["bonus"] = 5600000
     
 """
+import numpy as np
 
 import pickle
 
@@ -96,4 +97,66 @@ for key in keys:
 
 print "\n \n"
 
+print "\n Whats the value of stock options exercised by Jeffrey K Skilling \n"
+
 print enron_data['SKILLING JEFFREY K']['exercised_stock_options']
+
+print "\n Of these three individuals 'Lay, Skilling and Fastow' \n"
+
+print "who took home the most money (largest value of 'total_payments' feature)? \n"
+
+print "\n checking the keys of the POIs \n"
+
+print enron_data['SKILLING JEFFREY K'].keys()
+
+print "\n finding Lay, Skilling and Fastow \n"
+
+find_three_poi_list = list()
+for key in keys:
+
+    #print key
+
+    find_three_poi = re.findall("[FLS]\S.+", key)
+
+    if len(find_three_poi)> 0:
+        #print find_three_poi
+
+        find_three_poi_list.append(find_three_poi[0])
+
+print sorted(find_three_poi_list)
+
+print "\n finding Lay, SKilling and Fastows total payments\n"
+
+print "\n FASTOW ANDREW S total payments\n "
+
+print enron_data['FASTOW ANDREW S']['total_payments']
+
+print "\n LAY KENNETH L total payments \n "
+
+print enron_data['LAY KENNETH L']['total_payments']
+
+print "\n 'SKILLING JEFFREY K'total payments\n "
+
+print enron_data['SKILLING JEFFREY K']['total_payments']
+
+largest_total_payment = np.array([enron_data['FASTOW ANDREW S']['total_payments'],
+
+                                 enron_data['LAY KENNETH L']['total_payments'],
+
+                                 enron_data['SKILLING JEFFREY K']['total_payments']])
+
+print "\n Who got the largest payment? \n"
+
+print largest_total_payment.max()
+
+print "LAY KENNETH L"
+
+print type(enron_data['METTS MARK']['deferral_payments'])
+
+print enron_data
+
+
+
+
+
+
