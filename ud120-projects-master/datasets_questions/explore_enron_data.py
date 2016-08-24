@@ -299,3 +299,15 @@ print "\n creating a df \n"
 enron_data_df = pd.DataFrame(enron_data_list, columns=enron_df_columns_list)
 
 print enron_data_df.head()
+
+print enron_data_df.shape
+
+print "how many folks have quantified salary? and know many have emails?"
+
+print "\n quantified salary\n"
+
+print enron_data_df['email_address'][enron_data_df["salary"] != 'NaN'].shape[0]
+
+print "\n and have know emails \n"
+
+print enron_data_df['email_address'][enron_data_df["email_address"] != 'NaN'].shape[0]
