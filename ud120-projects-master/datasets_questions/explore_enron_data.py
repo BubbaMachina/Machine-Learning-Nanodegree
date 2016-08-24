@@ -311,3 +311,40 @@ print enron_data_df['email_address'][enron_data_df["salary"] != 'NaN'].shape[0]
 print "\n and have know emails \n"
 
 print enron_data_df['email_address'][enron_data_df["email_address"] != 'NaN'].shape[0]
+
+print ("\n How many people in the E+F dataset (as it currently exists) ")
+
+print  ("have NaN for their total payments? What percentage of people in the dataset as a whole is this? \n")
+
+print "\nhave NaN for their total payments? \n "
+
+print enron_data_df["total_payments"][enron_data_df["total_payments"] == 'NaN'].shape[0]
+
+perct_total_payment = (
+    float(enron_data_df["total_payments"][enron_data_df["total_payments"] == 'NaN'].shape[0])
+
+    /
+
+    float(enron_data_df.shape[0]))
+
+print (perct_total_payment * 100 )
+
+print enron_data_df.shape[0]
+
+print "\n How many POIs in the E+F dataset have NaN for their total payments?"
+
+print "What percentage of POI\'s as a whole is this? \n "
+
+print enron_data_df["total_payments"][enron_data_df["poi"] == True].shape[0]
+
+
+percentage_poi= (
+    float((enron_data_df["total_payments"][enron_data_df["total_payments"] == 'NaN']
+          [enron_data_df["poi"] == True]).shape[0])
+
+    /
+
+    float(enron_data_df.shape[0]))
+
+print percentage_poi
+
