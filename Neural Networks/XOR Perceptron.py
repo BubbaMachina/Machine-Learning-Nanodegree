@@ -38,6 +38,13 @@ class Perceptron:
         strength = np.dot(values, self.weights)
 
         # Then return 0 or 1 depending on strength compared to threshold
+
+        print "\n +++++++++++ Entering activate ++++++++++++++++\n"
+
+        print "\n values: " , values
+
+        print "\n weights: ", self.weights
+
         print "\n strenght: ", strength, " ---> ", np.sum(strength)
 
         print "\n threshold ", self.threshold,
@@ -48,120 +55,211 @@ class Perceptron:
 
             # print [np.sum(strength), 1]
 
+            print "\n ++++++++++ Exiting Activate ++++++++++++++++++\n"
+
             return [np.sum(strength), 1]
 
         else:
             # print [np.sum(strength), 0]
 
+            print "\n ++++++++++ Exiting Activate ++++++++++++++++++\n"
+
             return [np.sum(strength), 0]
 
-    def fire(self, inputvalues, layer):
+    def single_node_activation(self, inputvalues, layer):
+        print "\n^^^^^^^^Entering single node activation^^^^^^^^^^^^^^^\n"
 
-        fire = 0
+        print "\n input nodes: ", inputvalues
 
-        # layers_list = list()
+        print "\n weights: ", layer
 
-        print "\n inputs: ", inputvalues
+        print "\n -------------- computing strength and activation of perceptron ------------------\n"
 
-        print "\n layer: ", layer
+        #print self.activate(inputvalues)
 
-        input_counts = len(inputvalues)
+        if len(inputvalues) == len(layer):
+            count = 0
+            activation = 0
 
-        print "\n input counts : ", input_counts
+            while count < len(layer):
+                activation += inputvalues[count] * layer[count]
+                print activation
 
-        layers_count = len(layer)
+                count += 1
 
-        print "\n layers count: ", layers_count
+        print "\n activation: ", activation
 
-        if type(layer[0]) is int:
-            nodes_count = 1
+        print "\n -------------- End of computing strength and activation of perceptron ------------------\n"
 
-            layers_list = layer
+        print "\n^^^^^^^^^^^^Exiting single node activation^^^^^^^^^^^^^^^\n"
 
-        else:
-            nodes_count = len(layer[0])
+        return activation
 
-            print "\n nodes count: " , nodes_count
+    def multiple_node_activation(self, inputvalues, layer):
+        """
+        processing activation when there are more than one nodes in the network.
+        If there is only one node in the layer, it will route it to single_node_activation
+        :param inputvalues:
+        :param layer:
+        :return:
+        """
 
-            layers_list = list()
+        print "\n *********Entering multiple nodes activation *********** \n"
 
-            for node_count in range(nodes_count):
-                nodes_list = list()
+        # checking the number of nodes in a layer
+        print layer
 
-                for nodes in layer:
-                    # print nodes[node_count]
+        print inputvalues
 
-                    nodes_list.append(nodes[node_count])
+        for nodes in layer:
+            if type(nodes) is not list:
+                print "\n**********Exiting multiple nodes activation**********\n "
 
-                # print "\n nodes list \n"
+                return self.single_node_activation(inputvalues,layer)
 
-                # print nodes_list
-
-                layers_list.append(nodes_list)
-
-        print "\n layer list: ", layers_list
-
-        layer_list_count = len(layers_list)
-
-        layer_list_cnt = 0
-
-        print "\n layers list count:  ", layer_list_count
-
-        layer_nodes = list()
-
-        for input_value in range(input_counts):
-
-            self.weights = layers_list[layer_list_cnt]
-
-            print "\n input ", inputvalues[input_value]
-
-            print "\n weights: ", self.weights
-
-            # layer_nodes =list()
-
-            if layer_list_cnt < layer_list_count:
-                actv = self.activate(inputvalues[input_value])
-
-                print "\n activation: ", actv
-
-                layer_nodes.append(actv[0])
-
-                fire = fire + actv[1]
-
-                layer_list_cnt += 1
-
-                print "\n layer_list_cnt: ", layer_list_cnt
             else:
-                print "\n next layer nodes: ", layer_nodes, "\n percep : ", fire
 
-                return [layer_nodes, fire]
+                print "\n---------------------number of items in the input parameters------------------ "
+
+                print "\n inputs: ", inputvalues
+
+                print "\n layer: ", layer
+
+                print "\n nodes: ", nodes
+
+                input_counts = len(inputvalues)
+
+                print "\n number of inputs: ", input_counts
+
+                layers_count = len(layer)
+
+                print "\n number of layers: ", layers_count
+
+                nodes_count = len(layer[0])
+
+                print "\n nodes in each layer: ", nodes_count
+
+                print "\n -----------------End of number of items in the argument--------------------"
 
                 break
 
-        print "\n node activations: ", layer_nodes, "\n percep : ", fire
+        print "\n -----------------Seperating weight nodes for computation-----------------------\n"
 
-        return [layer_nodes, fire]
+        weights_list = list()
 
-    def OR_gate(node_activations):
+        for node_count in range(nodes_count):
+            nodes_list = list()
+
+            for nodes in layer:
+                #print nodes[node_count]
+
+                nodes_list.append(nodes[node_count])
+
+            print "\n weights of the nodes: ", nodes_list
+
+            weights_list.append(nodes_list)
+
+        print "\n weights in the layer: ", weights_list
+
+        weights_list_count = len(weights_list)
+
+        print "\n number of weight nodes in the layer: ", weights_list_count
+
+        print "\n ----------------End of seperation of weight nodes for activation ------------------\n"
+
+        print "\n----------------Iterating and computing activation------------------------------------\n"
+
+        wgt_lst_cnt = 0
+
+        fire = 0
+
+        layer_strengths = list()
+
+        for input_count in range(input_counts):
+
+            #updating weights one by one
+            self.weights = weights_list[wgt_lst_cnt]
+
+            print "\n current input value of X: ", inputvalues[input_count]
+
+            print "\n current weight in the node, W: ", self.weights
+
+            if wgt_lst_cnt < weights_list_count:
+                actv = self.activate(inputvalues[input_count])
+
+                print "\n activation [strength, perceptron activation]: ", actv
+
+                layer_strengths.append(actv[0])
+
+                fire = fire + actv[1]
+
+                print "\n current count of the weight layer: ", wgt_lst_cnt
+
+                wgt_lst_cnt += 1
+
+        print "\n strengths: ", layer_strengths, "\n perceptron activation : ", fire
+
+        print "\n----------------Exiting iteration and computing activation------------------------------------\n"
+
+        print "\n**********Exiting multiple nodes activation**********\n "
+
+        return [layer_strengths, fire]
+
+
+    def OR_gate(self, activation):
         """
-        OR Gate Threshold Selection: lesser of the two nodes
+        This is to compute the perceptron for OR Gate:
 
-        Threshold : Lesser Node - 1
+        :return:
         """
-        if node_activation[0][0] < node_activation[0][1]:
+        print "\n =============== Enter OR GATE Threshold Computation =============\n"
 
-            return node_activation[0][0] - 1
+        print "\n threshold: ", self.threshold
+
+        print "\n activation : ", activation
+
+        if activation > self.threshold:
+            print "\n ================ Exit OR GATE Threshold Computation===============\n"
+
+            return 1
 
         else:
-            return node_activation[0][1] - 1
+            print "\n ================ Exit OR GATE Threshold Computation===============\n"
 
-    def AND_gate(node_activations):
-        """
-        OR Gate Threshold Selection: lesser of the two nodes
+            return 0
 
-        Threshold : (Greater Node + Lesser Node) - 1
+    def AND_gate(self, activation):
         """
-        return ((node_activation[0][0] + node_activation[0][1]) - 1)
+        This is to compute the perceptron for OR Gate:
+
+        :return:
+        """
+        print "\n =============== Enter AND GATE Threshold Computation =============\n"
+
+        print "\n threshold: ", self.threshold
+
+        print "\n activation : ", activation
+
+        if activation > self.threshold:
+            print "\n ================ Exit AND GATE Threshold Computation===============\n"
+
+            return 1
+
+        else:
+            print "\n ================ Exit AND GATE Threshold Computation===============\n"
+
+            return 0
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Part 1: Set up the perceptron network
@@ -173,9 +271,6 @@ Network = [
 ]
 
 
-# Part 2: Define a procedure to compute the output of the network, given inputs
-
-
 def EvalNetwork(inputValues, Network):
     """
     Takes in @param inputValues, a list of input values, and @param Network
@@ -185,42 +280,57 @@ def EvalNetwork(inputValues, Network):
 
     # YOUR CODE HERE
 
-    # OR Gate:
+    print "\n .................Starting Evaluation Network: ................\n"
 
-    # fire = fire()
+    input_node = inputValues
 
-    or_gate = list()
+    threshold_list = list()
 
-    and_gate = list()
-
-    perceptron_list = list()
-
-    print "\n\n input values: ", inputValues
-
-    print "\n network: ", Network
-
-    print "\n Enters fire()  "
-
-    # for Layer in Network:
-    print "\n perceptron - fire: \n",
-
+    # 1. computing the activations of the networks:
     for layer in Network:
-        print layer
 
-    for layer in Network:
-        print "\n fire layer: ", layer
         perceptron = (
-            Perceptron(weights=1, threshold=1).fire(inputvalues=inputValues, layer=layer))
+            Perceptron(weights= 1,threshold= 1).multiple_node_activation(inputvalues= inputValues, layer= layer))
 
-        inputvalues = perceptron[0]
+        print "\n Perceptron activation: ", perceptron
 
-        print"\n perceptron - fire: ", perceptron
+        if perceptron != None and type(perceptron) is list :
 
-        perceptron_list.append(perceptron)
+            inputValues = perceptron[0]
 
-        print "\n perceptron_list: ", perceptron_list
+            print "\n <><><><<><><> Moving to the next layer <><><><><><><><><> \n "
 
-    print "\n end"
+            print "\n next input : ", inputValues
+
+            #print "\n previous layer: ", layer
+
+            print "\n <><><><><><><> Entering the next layer of the neaural network <><><><><><><><> \n "
+
+    if np.sum(input_node) == 1:
+        or_perceptron = Perceptron(weights= 1,threshold= perceptron - 1 ).OR_gate(perceptron)
+
+        and_perceptron = Perceptron(weights= 1,threshold= perceptron  ).AND_gate(perceptron)
+
+    elif np.sum(input_node) == 2:
+        or_perceptron = Perceptron(weights= 1,threshold= perceptron - 1 ).OR_gate(perceptron)
+
+        and_perceptron = Perceptron(weights=1, threshold= perceptron - 1).AND_gate(perceptron)
+
+    else:
+        or_perceptron = Perceptron(weights= 1,threshold= perceptron + 1 ).OR_gate(perceptron)
+
+        and_perceptron = (Perceptron(weights=1, threshold= perceptron + 1).AND_gate(perceptron) )
+
+    print "\n OR Perceptron: ", or_perceptron
+
+    print "\n AND Perpectron: ", and_perceptron
+
+    print  "\n The end"
+
+    print "\n .................Ending Evaluation Network: ................\n"
+
+    return (or_perceptron - and_perceptron)
+
 
     # Be sure your output value is a single number
     # return OutputValue
@@ -230,10 +340,21 @@ def test():
     """
     A few tests to make sure that the perceptron class performs as expected.
     """
-    print "0 XOR 0 = 0?:", EvalNetwork(np.array([0, 0]), Network)
-    print "0 XOR 1 = 1?:", EvalNetwork(np.array([0, 1]), Network)
-    print "1 XOR 0 = 1?:", EvalNetwork(np.array([1, 0]), Network)
-    print "1 XOR 1 = 0?:", EvalNetwork(np.array([1, 1]), Network)
+    case_1 = EvalNetwork(np.array([0, 0]), Network)
+
+    print "\n 0 XOR 0 = 0?:", case_1
+
+    case_2 = EvalNetwork(np.array([0, 1]), Network)
+
+    print "\n 0 XOR 1 = 1?:", case_2
+
+    case_3 = EvalNetwork(np.array([1, 0]), Network)
+
+    print "\n 1 XOR 0 = 1?:", case_3
+
+    case_4 = EvalNetwork(np.array([1, 1]), Network)
+
+    print "\n 1 XOR 1 = 0?:", case_4
 
 
 if __name__ == "__main__":
