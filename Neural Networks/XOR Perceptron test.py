@@ -208,20 +208,51 @@ class Perceptron:
 
     def OR_gate(self, activation):
         """
-        This is to compute the threshold for OR Gate:
+        This is to compute the perceptron for OR Gate:
 
-        Threshold = Lesser Node activation - 1
-
-        where inputs are [0,1] and [1,0]
         :return:
         """
         print "\n =============== Enter OR GATE Threshold Computation =============\n"
 
-        print "\n activation : " activation
+        print "\n threshold: ", self.threshold
 
-        print "\n ================ Exit OR GATE Threshold Computation===============\n"
+        print "\n activation : ", activation
 
-        return None
+        if activation > self.threshold:
+            print "\n ================ Exit OR GATE Threshold Computation===============\n"
+
+            return 1
+
+        else:
+            print "\n ================ Exit OR GATE Threshold Computation===============\n"
+
+            return 0
+
+    def AND_gate(self, activation):
+        """
+        This is to compute the perceptron for OR Gate:
+
+        :return:
+        """
+        print "\n =============== Enter AND GATE Threshold Computation =============\n"
+
+        print "\n threshold: ", self.threshold
+
+        print "\n activation : ", activation
+
+        if activation > self.threshold:
+            print "\n ================ Exit AND GATE Threshold Computation===============\n"
+
+            return 1
+
+        else:
+            print "\n ================ Exit AND GATE Threshold Computation===============\n"
+
+            return 0
+
+
+
+
 
 
 
@@ -249,6 +280,8 @@ def EvalNetwork(inputValues, Network):
 
     # YOUR CODE HERE
 
+    print "\n .................Starting Evaluation Network: ................\n"
+
     input_node = inputValues
 
     threshold_list = list()
@@ -273,15 +306,30 @@ def EvalNetwork(inputValues, Network):
 
             print "\n <><><><><><><> Entering the next layer of the neaural network <><><><><><><><> \n "
 
-
     if np.sum(input_node) == 1:
+        or_perceptron = Perceptron(weights= 1,threshold= perceptron - 1 ).OR_gate(perceptron)
 
-        threshold = Perceptron(weights= 1,threshold= perceptron - 1 ).OR_gate(perceptron)
+        and_perceptron = Perceptron(weights= 1,threshold= perceptron  ).AND_gate(perceptron)
+
+    elif np.sum(input_node) == 2:
+        or_perceptron = Perceptron(weights= 1,threshold= perceptron - 1 ).OR_gate(perceptron)
+
+        and_perceptron = Perceptron(weights=1, threshold= perceptron - 1).AND_gate(perceptron)
+
+    else:
+        or_perceptron = Perceptron(weights= 1,threshold= perceptron + 1 ).OR_gate(perceptron)
+
+        and_perceptron = (Perceptron(weights=1, threshold= perceptron + 1).AND_gate(perceptron) )
+
+    print "\n OR Perceptron: ", or_perceptron
+
+    print "\n AND Perpectron: ", and_perceptron
 
     print  "\n The end"
 
+    print "\n .................Ending Evaluation Network: ................\n"
 
-
+    return (or_perceptron - and_perceptron)
 
 
     # Be sure your output value is a single number
@@ -292,10 +340,21 @@ def test():
     """
     A few tests to make sure that the perceptron class performs as expected.
     """
-    print "0 XOR 0 = 0?:", EvalNetwork(np.array([0, 0]), Network)
-    print "0 XOR 1 = 1?:", EvalNetwork(np.array([0, 1]), Network)
-    print "1 XOR 0 = 1?:", EvalNetwork(np.array([1, 0]), Network)
-    print "1 XOR 1 = 0?:", EvalNetwork(np.array([1, 1]), Network)
+    case_1 = EvalNetwork(np.array([0, 0]), Network)
+
+    print "\n 0 XOR 0 = 0?:", case_1
+
+    case_2 = EvalNetwork(np.array([0, 1]), Network)
+
+    print "\n 0 XOR 1 = 1?:", case_2
+
+    case_3 = EvalNetwork(np.array([1, 0]), Network)
+
+    print "\n 1 XOR 0 = 1?:", case_3
+
+    case_4 = EvalNetwork(np.array([1, 1]), Network)
+
+    print "\n 1 XOR 1 = 0?:", case_4
 
 
 if __name__ == "__main__":
