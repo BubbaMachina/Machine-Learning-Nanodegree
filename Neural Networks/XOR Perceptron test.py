@@ -38,6 +38,13 @@ class Perceptron:
         strength = np.dot(values, self.weights)
 
         # Then return 0 or 1 depending on strength compared to threshold
+
+        print "\n +++++++++++ Entering activate ++++++++++++++++\n"
+
+        print "\n values: " , values
+
+        print "\n weights: ", self.weights
+
         print "\n strenght: ", strength, " ---> ", np.sum(strength)
 
         print "\n threshold ", self.threshold,
@@ -48,15 +55,31 @@ class Perceptron:
 
             # print [np.sum(strength), 1]
 
+            print "\n ++++++++++ Exiting Activate ++++++++++++++++++\n"
+
             return [np.sum(strength), 1]
 
         else:
             # print [np.sum(strength), 0]
 
+            print "\n ++++++++++ Exiting Activate ++++++++++++++++++\n"
+
             return [np.sum(strength), 0]
 
     def single_node_activation(self, inputvalues, layer):
         print "\n^^^^^^^^Entering single node activation^^^^^^^^^^^^^^^\n"
+
+        print "\n input nodes: ", inputvalues
+
+        print "\n weights: ", layer
+
+        self.weights = layer
+
+        print "\n -------------- computing strength and activation of perceptron ------------------\n"
+
+        print self.activate(inputvalues)
+
+        print "\n -------------- End of computing strength and activation of perceptron ------------------\n"
 
         print "\n^^^^^^^^^^^^Exiting single node activation^^^^^^^^^^^^^^^\n"
 
@@ -134,6 +157,47 @@ class Perceptron:
 
         print "\n ----------------End of seperation of weight nodes for activation ------------------\n"
 
+        print "\n----------------Iterating and computing activation------------------------------------\n"
+
+        wgt_lst_cnt = 0
+
+        fire = 0
+
+        layer_strengths = list()
+
+        for input_count in range(input_counts):
+
+            #updating weights one by one
+            self.weights = weights_list[wgt_lst_cnt]
+
+            print "\n current input value of X: ", inputvalues[input_count]
+
+            print "\n current weight in the node, W: ", self.weights
+
+            if wgt_lst_cnt < weights_list_count:
+                actv = self.activate(inputvalues[input_count])
+
+                print "\n activation [strength, perceptron activation]: ", actv
+
+                layer_strengths.append(actv[0])
+
+                fire = fire + actv[1]
+
+                print "\n current count of the weight layer: ", wgt_lst_cnt
+
+                wgt_lst_cnt += 1
+
+        print "\n strengths: ", layer_strengths, "\n perceptron activation : ", fire
+
+        print "\n----------------Exiting iteration and computing activation------------------------------------\n"
+
+        return [layer_strengths, fire]
+
+
+
+
+
+
 
 
 
@@ -161,7 +225,25 @@ def EvalNetwork(inputValues, Network):
     # 1. computing the activations of the networks:
     for layer in Network:
 
-        Perceptron(weights= 1,threshold= 1).multiple_node_activation(inputvalues= inputValues, layer= layer)
+        perceptron = (
+            Perceptron(weights= 1,threshold= 1).multiple_node_activation(inputvalues= inputValues, layer= layer))
+
+        print perceptron
+
+        if perceptron != None:
+
+            inputValues = perceptron[0]
+
+            print "\n <><><><<><><> Moving to the next layer <><><><><><><><><> \n "
+
+            print "\n next input : ", inputValues
+
+            #print "\n previous layer: ", layer
+
+            print "\n <><><><><><><> Entering the next layer of the neaural network <><><><><><><><> \n "
+
+
+
 
 
     # Be sure your output value is a single number
