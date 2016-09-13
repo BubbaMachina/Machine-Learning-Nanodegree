@@ -73,17 +73,27 @@ class Perceptron:
 
         print "\n weights: ", layer
 
-        self.weights = layer
-
         print "\n -------------- computing strength and activation of perceptron ------------------\n"
 
-        print self.activate(inputvalues)
+        #print self.activate(inputvalues)
+
+        if len(inputvalues) == len(layer):
+            count = 0
+            activation = 0
+
+            while count < len(layer):
+                activation += inputvalues[count] * layer[count]
+                print activation
+
+                count += 1
+
+        print "\n activation: ", activation
 
         print "\n -------------- End of computing strength and activation of perceptron ------------------\n"
 
         print "\n^^^^^^^^^^^^Exiting single node activation^^^^^^^^^^^^^^^\n"
 
-        return None
+        return activation
 
     def multiple_node_activation(self, inputvalues, layer):
         """
@@ -191,10 +201,27 @@ class Perceptron:
 
         print "\n----------------Exiting iteration and computing activation------------------------------------\n"
 
+        print "\n**********Exiting multiple nodes activation**********\n "
+
         return [layer_strengths, fire]
 
 
+    def OR_gate(self, activation):
+        """
+        This is to compute the threshold for OR Gate:
 
+        Threshold = Lesser Node activation - 1
+
+        where inputs are [0,1] and [1,0]
+        :return:
+        """
+        print "\n =============== Enter OR GATE Threshold Computation =============\n"
+
+        print "\n activation : " activation
+
+        print "\n ================ Exit OR GATE Threshold Computation===============\n"
+
+        return None
 
 
 
@@ -222,15 +249,19 @@ def EvalNetwork(inputValues, Network):
 
     # YOUR CODE HERE
 
+    input_node = inputValues
+
+    threshold_list = list()
+
     # 1. computing the activations of the networks:
     for layer in Network:
 
         perceptron = (
             Perceptron(weights= 1,threshold= 1).multiple_node_activation(inputvalues= inputValues, layer= layer))
 
-        print perceptron
+        print "\n Perceptron activation: ", perceptron
 
-        if perceptron != None:
+        if perceptron != None and type(perceptron) is list :
 
             inputValues = perceptron[0]
 
@@ -241,6 +272,13 @@ def EvalNetwork(inputValues, Network):
             #print "\n previous layer: ", layer
 
             print "\n <><><><><><><> Entering the next layer of the neaural network <><><><><><><><> \n "
+
+
+    if np.sum(input_node) == 1:
+
+        threshold = Perceptron(weights= 1,threshold= perceptron - 1 ).OR_gate(perceptron)
+
+    print  "\n The end"
 
 
 
